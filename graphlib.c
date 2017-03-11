@@ -102,40 +102,44 @@ void read_data()
 // -----------------------------------------------------------------------------
 void get_num_pend()
 {
-int 	start = 1;
-char 	*ref = "Number of Double Pendulums";
-char 	buf[LINE];							
-char 	*res;
+int 	start = 1;								// flag for the while loop
+char 	*ref = "Number of Double Pendulums";	// line to be search
+char 	row[LINE];								// stores the actual row				
 
 	while (start) {
-		res = fgets(buf, 100, fd);
-		if (res == NULL) {
+
+		fgets(row, LINE, fd);
+
+		if (row == NULL) {
 			printf("Error reading the file.\n");
 		}
-		if (strncmp(buf, ref, (int)strlen(ref)) == 0) start = 0;	
+
+		if (strncmp(row, ref, (int)strlen(ref)) == 0) start = 0;
+
 	}
 	
-		res = fgets(buf, 100, fd);
-		npend = atoi(buf);
+		fgets(row, LINE, fd);
+		npend = atoi(row);
 }
 // -----------------------------------------------------------------------------
 // GET_PARAM: get the parameters of the double pendulums 
 // -----------------------------------------------------------------------------
 void get_param()
 {
-int 	i = 0; 		//index of the "value" buffer
-int 	line;		//store the number of the line
-char 	buf[LINE];							
-char 	*res;
+int 	i = 0; 			//index of the "value" buffer
+int 	n_line;			//store the number of the line
+char 	row[LINE];		// stores the actual row			
 
-	for (line = 1; line <= npend * 18; line++) {
-		res = fgets(buf, 100, fd); 
-		if (res == NULL) {
+	for (n_line = 1; n_line <= npend * 18; n_line++) {
+		
+		fgets(row, LINE, fd);
+
+		if (row == NULL) {
 			printf("Error getting the data.\n");
 		}
 
-		if (line % 3 == 0) {
-			value[i] = atoi(res);
+		if (n_line % 3 == 0) {
+			value[i] = atoi(row);
 			i++;
 		}
 	}
