@@ -1,0 +1,170 @@
+// -----------------------------------------------------------------------------
+// COMMENT HERE!!!
+// The length of a line in this text cannot excede 80 character
+// -----------------------------------------------------------------------------
+
+Number of Double Pendulums:
+4
+__________________________
+1st Pendulum:	Theta 	1:
+				179
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				180
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+2nd Pendulum:	Theta 	1:
+				90
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				180
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+3rd Pendulum:	Theta 	1:
+				30
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				50
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+4th Pendulum:	Theta 	1:
+				180	
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------
+				Theta 	2:
+				180
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+5th Pendulum:	Theta 	1:
+				45	
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				135
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+6th Pendulum:	Theta 	1:
+				45	
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				315 
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+7th Pendulum:	Theta 	1:
+				30
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				120
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+8th Pendulum:	Theta 	1:
+				270	
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+			 	270
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
+9th Pendulum:	Theta 	1:
+				0	
+
+				Lenght 	1:
+				2
+	
+				Mass 	1:
+				1
+---------------	
+				Theta 	2:
+				0
+	
+				Lenght 	2:
+				2
+	
+				Mass 	2:
+				1
+__________________________
