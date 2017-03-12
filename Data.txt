@@ -6,165 +6,174 @@
 Number of Double Pendulums:
 9
 __________________________
-1st Pendulum:	Theta 	1:
-				90
+1st Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				180
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-2nd Pendulum:	Theta 	1:
-				90
+2nd Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				180
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-3rd Pendulum:	Theta 	1:
-				30
+3rd Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				50
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-4th Pendulum:	Theta 	1:
-				180	
+4th Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------
-				Theta 	2:
-				180
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-5th Pendulum:	Theta 	1:
-				45	
+5th Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				135
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-6th Pendulum:	Theta 	1:
-				45	
+6th Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				315 
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-7th Pendulum:	Theta 	1:
-				30
+7th Pendulum:	
+Theta 1:
+90
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				120
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-8th Pendulum:	Theta 	1:
-				270	
+8th Pendulum:	
+Theta 1:
+90	
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-			 	270
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________
-9th Pendulum:	Theta 	1:
-				0	
+9th Pendulum:	
+Theta 1:
+90	
 
-				Lenght 	1:
-				2
+Length 1:
+2
 	
-				Mass 	1:
-				1
+Mass 1:
+1
 ---------------	
-				Theta 	2:
-				0
+Theta 2:
+90
 	
-				Lenght 	2:
-				2
+Length 2:
+2
 	
-				Mass 	2:
-				1
+Mass 2:
+1
 __________________________

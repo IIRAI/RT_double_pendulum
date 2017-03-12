@@ -260,9 +260,9 @@ double 	tht1_dotdot;
 double 	s_tht2;				// sin(tht2)
 double 	s_tht12;			// sin(tht1 - tht2)
 double 	c_tht12;			// cos(tht1 - tht2)
-double 	N1;					// first element of the numerator
-double 	N2;					// second 	" " " "
-double 	N3;					// third	" " " "	
+double 	N1;					// 1st element of the numerator
+double 	N2;					// 2nd element of the numerator
+double 	N3;					// 3rd element of the numerator
 double 	l1;
 double 	l2;
 
