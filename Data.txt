@@ -4,176 +4,231 @@
 // -----------------------------------------------------------------------------
 
 Number of Double Pendulums:
-9
+4
 __________________________
-1st Pendulum:	
-Theta 1:
-90
+1st Pendulum:
+Theta_1:
+0
 
-Length 1:
+Angular_velocity_1:
+5
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
-90
-	
-Length 2:
+Theta_2:
+0
+
+Angular_velocity_2:
+-5
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-2nd Pendulum:	
-Theta 1:
+
+2nd Pendulum:
+Theta_1:
 90
 
-Length 1:
+Angular_velocity_1:
 2
-	
-Mass 1:
+
+Length_1:
+2
+
+Mass_1:
 1
 ---------------	
-Theta 2:
-90
-	
-Length 2:
-2
-	
-Mass 2:
-1
-__________________________
-3rd Pendulum:	
-Theta 1:
+Theta_2:
 90
 
-Length 1:
+Angular_velocity_2:
 2
-	
-Mass 1:
+
+Length_2:
+2
+
+Mass_2:
+1
+__________________________
+3rd Pendulum:
+Theta_1:
+0
+
+Angular_velocity_1:
+15
+
+Length_1:
+2
+
+Mass_1:
 1
 ---------------	
-Theta 2:
-90
-	
-Length 2:
+Theta_2:
+0
+
+Angular_velocity_2:
+15
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-4th Pendulum:	
-Theta 1:
-90
+4th Pendulum:
+Theta_1:
+66
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------
-Theta 2:
-90
-	
-Length 2:
+Theta_2:
+-66
+
+Angular_velocity_2:
+0
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-5th Pendulum:	
-Theta 1:
+5th Pendulum:
+Theta_1:
 90
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
+Theta_2:
 90
-	
-Length 2:
+
+Angular_velocity_2:
+0
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-6th Pendulum:	
-Theta 1:
+6th Pendulum:
+Theta_1:
 90
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
+Theta_2:
 90
-	
-Length 2:
+
+Angular_velocity_2:
+0
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-7th Pendulum:	
-Theta 1:
+7th Pendulum:
+Theta_1:
 90
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
+Theta_2:
 90
-	
-Length 2:
+
+Angular_velocity_2:
+0
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-8th Pendulum:	
-Theta 1:
-90	
+8th Pendulum:
+Theta_1:
+90
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
+Theta_2:
 90
-	
-Length 2:
+
+Angular_velocity_2:
+0
+
+Length_2:
 2
-	
-Mass 2:
+
+Mass_2:
 1
 __________________________
-9th Pendulum:	
-Theta 1:
-90	
+9th Pendulum:
+Theta_1:
+90
 
-Length 1:
+Angular_velocity_1:
+0
+
+Length_1:
 2
-	
-Mass 1:
+
+Mass_1:
 1
 ---------------	
-Theta 2:
+Theta_2:
 90
+
+Angular_velocity_2:
+0
 	
-Length 2:
+Length_2:
 2
 	
-Mass 2:
+Mass_2:
 1
 __________________________

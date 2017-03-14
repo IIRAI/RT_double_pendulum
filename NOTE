@@ -6,9 +6,12 @@
 
 - creare modo per ridurre la complessità computazionale RK2/RK1 per rimanere all'interno delle specifiche di time constrain.
 
+- cerca d unificare le funzioni di lettura con una sola funzione con diversi input: frase da cercare e vetore dove salvare 
+
+- crea funzione per errore in lettura del file .txt
 ---------------------------------------------------------------------------------
 
---- GIUSTIFICAZIONE PER THREAD DEDICATI.
+--- GIUSTIFICAZIONE PER THREAD DEDICATI.   
 
 Per la gestione computazionale-grafica dei pendoli sarebbe stato possibile scegliere tra due soluzioni: creare due task, una per la parte computazionale di TUTTI i pendoli e 
 una per la parte grafica di TUTTI i pendoli oppure dei thread dedicati per ciascun pendolo, con quindi perte computazionale e grafica insieme e dedicate per ogni pendolo.
@@ -28,3 +31,6 @@ PRO e CONTRO delle due soluzioni;
 
 	CONTRO:
 	- numero di task generalmente più alto fino a un massimo di nove.
+
+--- GIUSTIFICAZIONE FUNZIONI DEDICATE PER LA RICERCA DEI DATI.
+è più facile l'introduzione di nuovi parametri di input e modificare il programma di conseguenza; infatti basta fare una funzione uguale identica alla vecchia con nuovi parametri di ricerca

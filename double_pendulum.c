@@ -12,7 +12,7 @@
 int main()
 {
 int 	i;
-char 	scan = 0;	
+char 	scan = 0;
 
 	read_data();
 	display_init();
@@ -26,6 +26,6 @@ char 	scan = 0;
 	end = 1;
 	for (i = 0; i <= npend; i++) wait_for_task_end(i);
 
-	allegro_exit();	
+	allegro_exit();
 	return 0;
 }

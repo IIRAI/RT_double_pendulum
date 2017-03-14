@@ -26,7 +26,7 @@ float 		lag[MAX_DP];				// istantaneous Lagrangian value
 // -----------------------------------------------------------------------------
 // BITMAP VARIABLES
 // -----------------------------------------------------------------------------
-int 		l;							// length of the BITMAP
+int 		l;							// length of the BITMAP to display the pendulums
 BITMAP  	*bkg_pend[MAX_DP];			// background of the pendulum
 BITMAP 		*light_traj[MAX_DP];		// contains the light 		mode trail 
 BITMAP 		*lagr_traj[MAX_DP];			// contains the lagrangian 	mode trail
@@ -40,9 +40,10 @@ COLOR_MAP 	table;						// contains the shade values for light effects
 // FILE MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
 static void 	get_num_pend();
-// static void 	get_param();
 static void		get_theta_1();
 static void		get_theta_2();
+static void 	get_theta_dot_1();
+static void 	get_theta_dot_2();
 static void		get_length_1();
 static void		get_length_2();
 static void		get_mass_1();
@@ -50,20 +51,22 @@ static void		get_mass_2();
 // -----------------------------------------------------------------------------
 // GRAPHIC INITIALIZATION FUNCTIONS
 // -----------------------------------------------------------------------------
-static void 	draw_pbox();
+static void 	pbox_init();
 static void 	bkg_length();
 static void		get_ref_1p();
 static void		get_ref_4p();
 static void		get_ref_9p();
-static void 	bkg_init();
+static void 	create_bkg();
 static void 	create_image(BITMAP **image, int w, int l);
 static void 	pend_init();
-static void 	draw_win();
-static void 	init_window_bitmap();
-static void 	init_keycmd();
-static void 	init_initdata();
-static void 	init_geomdata();
-static void 	init_deadline();
+static void 	status_win_init();
+static void 	create_window_bitmap();
+static void 	keycmd_page();
+static void 	light_column();
+static void 	lagr_column();
+static void 	initdata_page();
+static void 	geomdata_page();
+static void 	deadline_page();
 // -----------------------------------------------------------------------------
 // GRAPHIC MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
@@ -83,8 +86,6 @@ static float 	tan_tr(int i);
 static float 	gauss(float var, float x);
 static float 	lin_v (int i);
 static float 	L(int i);
-static void 	light_column();
-static void 	lagr_column();
 
 // -----------------------------------------------------------------------------
 // FILE MANAGEMENT FUNCTIONS;
@@ -96,6 +97,8 @@ void read_data()
 	get_num_pend();
 	get_theta_1();
 	get_theta_2();
+	get_theta_dot_1();
+	get_theta_dot_2();
 	get_length_1();
 	get_length_2();
 	get_mass_1();
@@ -136,12 +139,13 @@ char 	row[LINE];								// stores the actual row
 }
 
 // -----------------------------------------------------------------------------
-// TEST-ONE!!!!!!!!!!!
+// GET_THETA_1: searches and gets the value of theta 1 for each double pendulum 
 // -----------------------------------------------------------------------------
+
 void get_theta_1()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Theta 1:";						// line to be search
+char 	*ref = "Theta_1:";						// line to be search
 char 	row[LINE];								// stores the actual row
 
 	fd = fopen("Data.txt", "r");	
@@ -168,10 +172,14 @@ char 	row[LINE];								// stores the actual row
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// GET_THETA_2: searches and gets the value of theta 2 for each double pendulum 
+// -----------------------------------------------------------------------------
+
 void get_theta_2()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Theta 2:";						// line to be search
+char 	*ref = "Theta_2:";						// line to be search
 char 	row[LINE];								// stores the actual row				
 
 	fd = fopen("Data.txt", "r");	
@@ -198,10 +206,85 @@ char 	row[LINE];								// stores the actual row
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// GET_THETA_DOT_1: searches and gets the value of the initial angular velocity
+// of the first pendulum for each double pendulum 
+// -----------------------------------------------------------------------------
+
+void get_theta_dot_1()
+{
+int 	start = 0;								// flag for the while loop
+char 	*ref = "Angular_velocity_1:";			// line to be search
+char 	row[LINE];								// stores the actual row				
+
+	fd = fopen("Data.txt", "r");	
+	if (fd == NULL) {
+		printf ("Error opening the file.\n");
+		exit(1);
+	}	
+
+	while (start < npend) {
+
+		fgets(row, LINE, fd);
+
+		if (row == NULL) {
+			printf("Error reading the file.\n");
+		}
+
+		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
+			fgets(row, LINE, fd);
+			pnd[start].tht1_dot = (atoi(row));
+			start++;
+		}
+	}
+	
+	fclose(fd);
+}
+
+// -----------------------------------------------------------------------------
+// GET_THETA_DOT_2: searches and gets the value of the initial angular velocity
+// of the second pendulum for each double pendulum 
+// -----------------------------------------------------------------------------
+
+void get_theta_dot_2()
+{
+int 	start = 0;								// flag for the while loop
+char 	*ref = "Angular_velocity_2:";			// line to be search
+char 	row[LINE];								// stores the actual row				
+
+	fd = fopen("Data.txt", "r");	
+	if (fd == NULL) {
+		printf ("Error opening the file.\n");
+		exit(1);
+	}	
+
+	while (start < npend) {
+
+		fgets(row, LINE, fd);
+
+		if (row == NULL) {
+			printf("Error reading the file.\n");
+		}
+
+		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
+			fgets(row, LINE, fd);
+			pnd[start].tht2_dot = (atoi(row));
+			start++;
+		}
+	}
+	
+	fclose(fd);
+}
+
+// -----------------------------------------------------------------------------
+// GET_LENGTH_1: searches and gets the length of the first pendulum for each
+// double pendulum
+// -----------------------------------------------------------------------------
+
 void get_length_1()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Length 1:";						// line to be search
+char 	*ref = "Length_1:";						// line to be search
 char 	row[LINE];								// stores the actual row				
 
 	fd = fopen("Data.txt", "r");	
@@ -228,10 +311,15 @@ char 	row[LINE];								// stores the actual row
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// GET_LENGTH_2: searches and gets the length of the second pendulum for each
+// double pendulum
+// -----------------------------------------------------------------------------
+
 void get_length_2()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Length 2:";						// line to be search
+char 	*ref = "Length_2:";						// line to be search
 char 	row[LINE];								// stores the actual row				
 
 	fd = fopen("Data.txt", "r");	
@@ -258,10 +346,15 @@ char 	row[LINE];								// stores the actual row
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// GET_MASS_1: searches and gets the mass of the first pendulum for each
+// double pendulum
+// -----------------------------------------------------------------------------
+
 void get_mass_1()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Mass 1:";						// line to be search
+char 	*ref = "Mass_1:";						// line to be search
 char 	row[LINE];								// stores the actual row				
 
 	fd = fopen("Data.txt", "r");	
@@ -288,10 +381,15 @@ char 	row[LINE];								// stores the actual row
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// GET_MASS_2: searches and gets the mass of the second pendulum for each
+// double pendulum
+// -----------------------------------------------------------------------------
+
 void get_mass_2()
 {
 int 	start = 0;								// flag for the while loop
-char 	*ref = "Mass 2:";						// line to be search
+char 	*ref = "Mass_2:";						// line to be search
 char 	row[LINE];								// stores the actual row				
 
 	fd = fopen("Data.txt", "r");	
@@ -318,10 +416,7 @@ char 	row[LINE];								// stores the actual row
 }
 
 // -----------------------------------------------------------------------------
-
-// -----------------------------------------------------------------------------
-// INIT_DISPLAY:
-// initialize the display based on the number of pendulums
+// INIT_DISPLAY: initialize the display based on the number of pendulums
 // -----------------------------------------------------------------------------
 
 void display_init() 
@@ -334,21 +429,25 @@ void display_init()
 	// generate the table containing the shades of white
 	create_light_table(&table, default_palette, 0, 0, 0, NULL);		
 
-	draw_pbox();				// draw the Pendulum's Box
+	pbox_init();				// draw the Pendulum's Box
 	pend_init();				// initialize and draw the Pendulums
-	draw_win();					// draw the Data Window
+	status_win_init();					// draw the Data Window
 }
 
 // -----------------------------------------------------------------------------
-// INIT_DISPLAY:
-// initialize the display based on the number of pendulums
+// PBOX_INIT: initializes the boxes where the double pendulums are displayed
 // -----------------------------------------------------------------------------
 
-void draw_pbox()
+void pbox_init()
 {
 	bkg_length();
-	bkg_init();
+	create_bkg();
 }
+
+// -----------------------------------------------------------------------------
+// BKG_LENGTH: calculates the side legth of the boxes, based on the number of
+// double pendulums as input
+// -----------------------------------------------------------------------------
 
 void bkg_length()
 {
@@ -367,6 +466,12 @@ void bkg_length()
 		get_ref_9p();
 	}	
 }
+
+// -----------------------------------------------------------------------------
+// GET_REF_1P; GET_REF_4P; GET_REF_9P: 
+// defines the coordinates of the boxes, based on the number of double pendulums
+// respectively for 1 pendulum, for 4 pendulums at most and 9 pendulums at most. 
+// -----------------------------------------------------------------------------
 
 void get_ref_1p()
 {
@@ -413,14 +518,18 @@ void get_ref_9p()
 	ref[8].y = l * 2;
 }
 
-void bkg_init()
+// -----------------------------------------------------------------------------
+// CREATE_BKG: creates all the BITMAP needed to display each double pendulum:
+// -----------------------------------------------------------------------------
+
+void create_bkg()
 {
 int 	i;
 
-	for (i = 0; i < MAX_DP; i++) {
- 		create_image(&bkg_pend[i], l, l);
-		create_image(&light_traj[i], l, l);
-		create_image(&lagr_traj[i], l, l);
+	for (i = 0; i < npend; i++) {
+ 		create_image(&bkg_pend[i], l, l);		// to display the pendulum
+		create_image(&light_traj[i], l, l);		// to store the Light trail
+		create_image(&lagr_traj[i], l, l);		// to store the Lagrangian trail
 	}
 }
 
@@ -432,7 +541,8 @@ void create_image(BITMAP **image, int w, int l)
 }
 
 // -----------------------------------------------------------------------------
-// PEND_INIT: initializes the value of the pendulum
+// PEND_INIT: stores the first values inside the cycle buffer to draw the trail
+// and draws the double pendulums in their initial position
 // -----------------------------------------------------------------------------
 
 void pend_init()
@@ -441,22 +551,14 @@ int 	i = 0;
 int 	n;
 
 	for (n = 0; n < npend * 6; n += 6) {
-		// pnd[i].tht1 	= deg2rad(value [n]);
 			// printf("grad1:   %2.15lf\n", pnd[i].tht1);
 			// printf("grad1.1: %2.30lf\n", cos(pnd[i].tht1));
 			// printf("grad1.2: %2.30lf\n", sin(pnd[i].tht1));
-		pnd[i].tht1_dot	= 0.0;
-		// pnd[i].l1 		= value [n + 1];
-		// pnd[i].m1 		= value [n + 2];
-		// pnd[i].tht2 	= deg2rad(value [n + 3]);
 			// printf("grad2:   %2.15lf\n", pnd[i].tht2);
 			// printf("grad2.1: %2.30lf\n", cos(pnd[i].tht1));
 			// printf("grad2.3: %2.30lf\n", sin(pnd[i].tht1));
-		pnd[i].tht2_dot = 0.0;
-		// pnd[i].l2 		= value [n + 4];
-		// pnd[i].m2 		= value [n + 5];
-		xy_real(i);		// questi garantiscono che il primo valore della traiettoria sia quella del pendolo e non (0,0)
-		xy_graph(i);	// per evitare troppe funzioni si possono mettere le prime due nella terza ma attenzione
+		xy_real(i);		
+		xy_graph(i);
 		store_trail(i);
 		draw_pend(i);
 		i ++;
@@ -464,20 +566,24 @@ int 	n;
 }
 
 // -----------------------------------------------------------------------------
-// INIT_DISPLAY:
-// initialize the display based on the number of pendulums
+// STATUS_WIN_INIT: initializes the bitmaps to report the information about
+// the program.
 // -----------------------------------------------------------------------------			
 
-void draw_win()
+void status_win_init()
 {
-	init_window_bitmap();
-	init_keycmd();
-	init_initdata();
-	init_geomdata();
-	init_deadline();
+	create_window_bitmap();
+	keycmd_page();
+	initdata_page();
+	geomdata_page();
+	deadline_page();
 }
 
-void init_window_bitmap()
+// -----------------------------------------------------------------------------
+// CREATE_WINDOW_BITMAP: creates the bitmaps to be used for the status window
+// -----------------------------------------------------------------------------
+
+void create_window_bitmap()
 {
 	create_image(&keycmd, 		RWIN-LWIN+1, BWIN - UWIN + 1);
 	create_image(&init_data, 	RWIN-LWIN+1, BWIN - UWIN + 1);
@@ -485,7 +591,12 @@ void init_window_bitmap()
 	create_image(&dline, 		RWIN-LWIN+1, BWIN - UWIN + 1);
 }
 
-void init_keycmd()
+// -----------------------------------------------------------------------------
+// KEYCMD_PAGE: writes the keyboard command and the legend about the two 
+// different trail used in the program
+// -----------------------------------------------------------------------------
+
+void keycmd_page()
 {
 	textout_ex(keycmd, font, "Command Window", 40, 10, WH, BKG);
 
@@ -526,7 +637,63 @@ void init_keycmd()
 	blit(keycmd, screen, 0, 0, LWIN, UWIN, keycmd->w, keycmd->h);
 }
 
-void init_initdata()
+// -----------------------------------------------------------------------------
+// LIGHT_COLUMN: draws a column in the command page to show the shades of the
+// light trail adopted in the program
+// -----------------------------------------------------------------------------
+
+void light_column()
+{
+int 	i;
+int 	a;
+float 	shade[SH];
+
+	for (i = 0; i < 255; i++) {
+
+		for (a = 0; a < SH; a++) {
+
+			shade[a] = gauss( (0.0005 * (i+1)), (0.05 * a)) / gauss( (0.0005 * (i+1)), 0);
+
+			putpixel(keycmd, 66 + a, 320 + i, table.data[(int)(255 * shade[a])][WH]);
+			putpixel(keycmd, 66 - a, 320 + i, table.data[(int)(255 * shade[a])][WH]);
+		}
+	}
+}
+
+// -----------------------------------------------------------------------------
+// LAGR_COLUMN: draws a column in the command page to show the shade of colours
+// of the lagrangian trail adopted in the program
+// -----------------------------------------------------------------------------
+
+void lagr_column()
+{
+int 	i;				// index of the for cycle
+int 	a;				// index of the internal for cycle
+float 	shade[SH];
+int 	col;
+int 	r, g, b;
+
+	for (i = 0; i < SH; i++) {
+		shade[i] = pow(1.5, -i);
+	}
+
+	for (i = 0; i < 255; i++) {
+
+		hsv_to_rgb( i, 1, 1,   &r, &g, &b);		
+		col = makecol(r, g, b);
+
+		for (a = 0; a < SH; a++) {
+			putpixel(keycmd, 132 + a, 320 + i, table.data[(int)(255 * shade[a])][col]);
+			putpixel(keycmd, 132 - a, 320 + i, table.data[(int)(255 * shade[a])][col]);
+		}
+	}
+}
+
+// ------------------------------------------------------------------------------
+// INITDATA_PAGE: writes the initial position and velcity of each double pendulum 
+// ------------------------------------------------------------------------------
+
+void initdata_page()
 {	
 int 	i;
 char 	d[30];
@@ -541,20 +708,25 @@ char 	d[30];
 		sprintf(d, "   Theta1:  %g°", rad2deg(pnd[i].tht1));
 		textout_ex(init_data, font, d, 5, 40 + (60 * i), WH, BKG);
 
-		sprintf(d, "   Omega1:  %g", pnd[i].tht1_dot);
+		sprintf(d, "   Omega1:  %g [rad/s]", pnd[i].tht1_dot);
 		textout_ex(init_data, font, d, 5, 50 + (60 * i), WH, BKG);
 
 		sprintf(d, "   Theta2:  %g°", rad2deg(pnd[i].tht2));
 		textout_ex(init_data, font, d, 5, 60 + (60 * i), WH, BKG);
 
-		sprintf(d, "   Omega2:  %g", pnd[i].tht2_dot );
+		sprintf(d, "   Omega2:  %g [rad/s]", pnd[i].tht2_dot );
 		textout_ex(init_data, font, d, 5, 70 + (60 * i), WH, BKG);
 	}
 
 	textout_ex(init_data, font, "page 2/4", 66, BWIN - 15, WH, BKG);
 }
 
-void init_geomdata()
+// -----------------------------------------------------------------------------
+// GEOMDATA_PAGE: writes the geometrical data of each double pendulum 
+// as length and mass
+// -----------------------------------------------------------------------------
+
+void geomdata_page()
 {
 int 	i;
 char 	d[30];
@@ -583,19 +755,19 @@ char 	d[30];
 	textout_ex(geom_data, font, "page 3/4", 66, BWIN - 15, WH, BKG);
 }
 
-void init_deadline()
+// -----------------------------------------------------------------------------
+// DEADLINE_PAGE: writes the deadline missed of every running thread 
+// -----------------------------------------------------------------------------
+
+void deadline_page()
 {
 char 	w[30];
 
 	dline_flag = 0;
-	task_create(npend, line_wintask, WPER, WDL, WPRI);
 
 	textout_ex(dline, font, "Deadline Window", 40, 10, WH, BKG);
 
-	draw_dline();
-	
-	sprintf(w, "Window task: %d", tp[npend].dmiss);
-	textout_ex(dline, font, w, 5, 30 + (20 * npend), WH, BKG);
+	task_create(npend, line_wintask, WPER, WDL, WPRI);
 
 	textout_ex(dline, font, "page 4/4", 66, BWIN - 15, WH, BKG);
 
@@ -654,9 +826,7 @@ int 	n;
 }
 
 // -----------------------------------------------------------------------------
-// DEG2RAD: it converts values from degree  to radiant
-// -----------------------------------------------------------------------------
-// RAD2DEG: it converts values from radiant to degree
+// DEG2RAD: converts values from degree  to radiant
 // -----------------------------------------------------------------------------
 
 double deg2rad(float degree)
@@ -670,6 +840,10 @@ double 	rad;
 	return rad;
 }
 
+// -----------------------------------------------------------------------------
+// RAD2DEG: converts values from radiant to degree
+// -----------------------------------------------------------------------------
+
 float rad2deg(double radiant)
 {
 float 	deg;
@@ -682,7 +856,8 @@ float 	rad;
 }
 
 // -----------------------------------------------------------------------------
-// XY_REAL: evaluates the X and Y coordinates with real world values
+// XY_REAL: 
+// evaluates the X and Y coordinates with respect to the real world reference
 // -----------------------------------------------------------------------------
 
 void xy_real(int i)
@@ -706,8 +881,10 @@ float 	c_tht2;
 	pr[i].x2 = pr[i].x1 + l2 * s_tht2;
 	pr[i].y2 = pr[i].y1 + l2 * c_tht2;
 }
+
 // -----------------------------------------------------------------------------
-// XY_GRAPH: evaluates the X and Y coordinates for the display
+// XY_GRAPH:
+// evaluates the X and Y coordinates with respect to the display reference
 // -----------------------------------------------------------------------------
 
 void xy_graph(int i)
@@ -722,7 +899,8 @@ void xy_graph(int i)
 
 // -----------------------------------------------------------------------------
 // REAL2GRAPH: 
-// converts the values from the real world to the display dimensions
+// converts the coordinates from the the real world reference 
+// to the display reference
 // -----------------------------------------------------------------------------
 
 int real2graph(float value, int i)
@@ -734,6 +912,15 @@ float 	l12;		// sum of the length of the two pendulums
 	pixel = (int) ((value / l12) * (float)((l / 2) - R));
 	return pixel;
 }
+
+/******************************************************************************
+ The next two functions are executed inside a thread 
+ and manage the graphical aspect
+*******************************************************************************/
+
+// -----------------------------------------------------------------------------
+// DRAW_PEND: draw the double pendulum on the backround bitmap
+// -----------------------------------------------------------------------------
 
 void draw_pend(int i)
 {
@@ -748,10 +935,15 @@ void draw_pend(int i)
 	circlefill(bkg_pend[i], pp[i].x0, pp[i].y0, R, GREY);
 	circlefill(bkg_pend[i], pp[i].x1, pp[i].y1, R, BLUE);
 	circlefill(bkg_pend[i], pp[i].x2, pp[i].y2, R, RED);
+
 	blit(bkg_pend[i], screen, 0, 0, ref[i].x, ref[i].y, bkg_pend[i]->w, bkg_pend[i]->h);
 }
 
-void 	draw_dline()
+// -----------------------------------------------------------------------------
+// DRAW_DLINE: draw the deadline missed of the running threads
+// -----------------------------------------------------------------------------
+
+void draw_dline()
 {
 int 	i;				// "for" index
 char 	w[30];
@@ -761,12 +953,13 @@ char 	w[30];
 			textout_ex(dline, font, w, 5, 30 + (20 * i), WH, BKG);
 	}
 
+	sprintf(w, "Window task: %d", tp[npend].dmiss);
+	textout_ex(dline, font, w, 5, 30 + (20 * npend), WH, BKG);
 }
 
 // -----------------------------------------------------------------------------
-// TRAIL FUNCTIONS:
-// STORE TRAIL: insert the value of the ball i
-// DRAW_TRAIL: draw the w number of past values
+// STORE_TRAIL:
+// stores the new position of the second pendulum in the cycle buffer
 // -----------------------------------------------------------------------------
 
 void store_trail(int i)
@@ -779,6 +972,11 @@ int 	k;
 	k = (k + 1) % TLEN;			// k is updated to the next element
 	trail[i].top = k;			// top is updated to the last element
 }
+
+// -----------------------------------------------------------------------------
+// DRAW_TRAIL: 
+// draw both trail (Light and Lagrangian) inside the respective bitmap
+// -----------------------------------------------------------------------------
 
 void draw_trail(int i)
 {
@@ -804,6 +1002,10 @@ int 	x2, y2;					// graphics coordinates
 		blit(lagr_traj[i], bkg_pend[i], 0, 0, 0, 0, lagr_traj[i]->w, lagr_traj[i]->h);
 	}
 }
+
+// -----------------------------------------------------------------------------
+// LIGHT_TRAIL: manages the representation of the Light trail
+// -----------------------------------------------------------------------------
 
 void light_trail(int x2, int y2, int x1, int y1, int i)
 {
@@ -834,6 +1036,10 @@ float 	s_a;
 	}
 	line(light_traj[i], x2, y2,  x1, y1, table.data[255][WH]);
 }
+
+// -----------------------------------------------------------------------------
+// LAGR_TRAIL: manages the representation of the Lagrangian trail
+// -----------------------------------------------------------------------------
 
 void lagr_trail(int x2, int y2, int x1, int y1, int i)
 {
@@ -866,11 +1072,14 @@ int 	r, g, b;
 	line(lagr_traj[i], x2, y2,  x1, y1, table.data[200][col]);	
 }
 
-// Calcolo l'angolo tangente alla traiettoria
+// -----------------------------------------------------------------------------
+// TAN_TR: 
+// computes the istant tangent angle of the trajectory of the second pendulum
+// -----------------------------------------------------------------------------
 
 float tan_tr(int i)
 {
-float 	alpha;
+float 	alpha;					// istant tangent angle 
 float 	tht1, tht2;
 float 	tht1_dot, tht2_dot;
 float 	l1, l2;
@@ -898,6 +1107,14 @@ float 	x_dot, y_dot;
 	return alpha;
 }
 
+// -----------------------------------------------------------------------------
+// GAUSS: 
+// computes the value of a Gaussian function.
+// Variables:
+// 	"var" stores the variance 
+// 	"x" stores the value at which the Gaussian function is evaluated
+// -----------------------------------------------------------------------------
+
 float gauss(float var, float x)
 {
 float 	c, e;		// constant and exponent of the gaussian function
@@ -908,7 +1125,10 @@ float 	c, e;		// constant and exponent of the gaussian function
 	return c * exp(e);
 }
 
-// calcolo della velocità lineare della massa 2
+// -----------------------------------------------------------------------------
+// LIN_V: evaluates the istantaneous linear velocity of the second mass attached
+// at the end of the second pendulum
+// -----------------------------------------------------------------------------
 
 float lin_v (int i)		
 {
@@ -937,7 +1157,9 @@ float 	N1, N2, N3;
 	return vel;
 }
 
-// calcolo analitico del valore della Lagrangiana
+// -----------------------------------------------------------------------------
+// L: evaluates the istantaneous value of the Lagrangian of the system
+// -----------------------------------------------------------------------------
 
 float L(int i)
 {
@@ -969,46 +1191,4 @@ float 	V1, V2;
 	lag[i] = T1 + T2 - V1 - V2;
 	
 	return lag[i];
-}
-
-void light_column()
-{
-int 	i;
-int 	a;
-float 	shade[SH];
-
-	for (i = 0; i < 255; i++) {
-
-		for (a = 0; a < SH; a++) {
-
-			shade[a] = gauss( (0.0005 * (i+1)), (0.05 * a)) / gauss( (0.0005 * (i+1)), 0);
-
-			putpixel(keycmd, 66 + a, 320 + i, table.data[(int)(255 * shade[a])][WH]);
-			putpixel(keycmd, 66 - a, 320 + i, table.data[(int)(255 * shade[a])][WH]);
-		}
-	}
-}
-
-void lagr_column()
-{
-int 	i;				// index of the for cycle
-int 	a;				// index of the internal for cycle
-float 	shade[SH];
-int 	col;
-int 	r, g, b;
-
-	for (i = 0; i < SH; i++) {
-		shade[i] = pow(1.5, -i);
-	}
-
-	for (i = 0; i < 255; i++) {
-
-		hsv_to_rgb( i, 1, 1,   &r, &g, &b);		
-		col = makecol(r, g, b);
-
-		for (a = 0; a < SH; a++) {
-			putpixel(keycmd, 132 + a, 320 + i, table.data[(int)(255 * shade[a])][col]);
-			putpixel(keycmd, 132 - a, 320 + i, table.data[(int)(255 * shade[a])][col]);
-		}
-	}
 }
