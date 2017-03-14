@@ -5,7 +5,6 @@
 // TEXT RELATED CONSTANTS
 // -----------------------------------------------------------------------------
 #define LINE	80		// max length of a line of the .txt file
-#define N_PAR	6		// number of input parameter per pendulum
 // -----------------------------------------------------------------------------
 // TASK CONSTANTS
 // -----------------------------------------------------------------------------
@@ -52,9 +51,9 @@
 // STRUCTURE
 // -----------------------------------------------------------------------------
 
-// circolar buffer to store the points of the trail
+// circular buffer to store the points of the trail
 struct cbuf{
-	int top;
+	int top;	// stores the index of the last element of the buffer
 	int x[TLEN];
 	int y[TLEN];
 };

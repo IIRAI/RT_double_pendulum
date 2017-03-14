@@ -11,7 +11,7 @@ Theta_1:
 0
 
 Angular_velocity_1:
-5
+10
 
 Length_1:
 2
@@ -23,7 +23,7 @@ Theta_2:
 0
 
 Angular_velocity_2:
--5
+-10
 
 Length_2:
 2
@@ -62,7 +62,7 @@ Theta_1:
 0
 
 Angular_velocity_1:
-15
+7
 
 Length_1:
 2
@@ -74,7 +74,7 @@ Theta_2:
 0
 
 Angular_velocity_2:
-15
+7
 
 Length_2:
 2

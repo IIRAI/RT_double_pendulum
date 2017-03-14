@@ -11,9 +11,9 @@ COMMENT HERE
 #include "tasklib.h"
 
 struct 			sched_param *mypar;
-struct 			task_par 	tp[MAX_DP + 1];
-pthread_attr_t 	myatt[MAX_DP + 1];
-pthread_t 		pend[MAX_DP + 1];
+struct 			task_par 	tp[N_TASK];
+pthread_attr_t 	myatt[N_TASK];
+pthread_t 		pend[N_TASK];
 int 			end = 0;						// flag to terminate the task
 float 			h;								// increment interval
 
@@ -38,7 +38,6 @@ static double 	f1(double tht1_dot);
 static double 	f2(double tht2_dot);
 static double 	f3(double tht1, double tht2, double tht1_dot, double tht2_dot, int i);
 static double 	f4(double tht1, double tht2, double tht1_dot, double tht2_dot, int i);
-
 // -----------------------------------------------------------------------------
 // THREAD MANAGEMENT FUNCIONS
 // -----------------------------------------------------------------------------
@@ -53,7 +52,8 @@ static void 	time_copy(struct timespec *td, struct timespec ts);
 static int 		time_cmp(struct timespec t1, struct timespec t2);
 
 // -----------------------------------------------------------------------------
-// PEND_TASK: main function to represent the pendulum motion
+// PEND_TASK: thread function of the double pendulum. It evaluates the 
+// coordinate values and draw them on the backgrund bitmap
 // -----------------------------------------------------------------------------
 
 void *pend_task(void *arg)
@@ -76,7 +76,11 @@ int 	dmiss;
 	}
 }
 
-void *line_wintask(void *arg)
+// -----------------------------------------------------------------------------
+// DLINE_WINTASK: thread function of the deadline status window. 
+// -----------------------------------------------------------------------------
+
+void *dline_wintask(void *arg)
 {
 int 	a;
 
@@ -95,6 +99,7 @@ int 	a;
 // -----------------------------------------------------------------------------
 // RK4: it evaluates the new values of the pendulum
 // -----------------------------------------------------------------------------
+
 void RK4(int i)
 {
 	// aggiorna i valori di incremento
@@ -111,6 +116,7 @@ void RK4(int i)
 // -----------------------------------------------------------------------------
 // M: it evaluates the increments of the new values of the pendulum
 // -----------------------------------------------------------------------------
+
 void M(int i)
 {
 int 	a;
