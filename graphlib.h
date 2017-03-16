@@ -47,10 +47,15 @@
 // PENDULUM CONSTANT
 // -----------------------------------------------------------------------------
 #define MAX_DP	9					// max number of pendulums
-#define R 		5					// radius of the mass dot
 #define	PI 		3.141592653589793	// questo è necesario per avere una giusta approssimazione
 #define TLEN	2					// trail point stored 
+// -----------------------------------------------------------------------------
+// PENDULUM GRAPHIC
+// -----------------------------------------------------------------------------
+#define R 		5					// radius of the mass dot
 #define SH		5					// pixel radius of the trajectory shade
+#define VSCALE	0.0005				// variance scale factor for light shade
+#define DIST_G	0.05				// distaance between points at which the gaussian is evaluated
 
 // -----------------------------------------------------------------------------
 // STRUCTURE
@@ -105,8 +110,7 @@ struct par {
 extern struct 	point_real 	pr[MAX_DP];
 extern struct 	point_pixel pp[MAX_DP];
 extern struct 	par 		pnd[MAX_DP];
-extern int 					win;
-
+extern int 		win;
 // -----------------------------------------------------------------------------
 // FILE MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------

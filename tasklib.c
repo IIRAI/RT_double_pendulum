@@ -20,11 +20,11 @@ float 			h;								// increment interval
 // -----------------------------------------------------------------------------
 // MATRIXES TO STORE THE VALUES FOR THE PENDULUM'S MOTION
 // -----------------------------------------------------------------------------
-double 			k1[MAX_DP][4];
-double 			k2[MAX_DP][4];
-double 			k3[MAX_DP][4];
-double 			k4[MAX_DP][4];
-double 			m[MAX_DP][4];			// memorizza l'incremento del parametro
+double 		k1[MAX_DP][4];
+double 		k2[MAX_DP][4];
+double 		k3[MAX_DP][4];
+double 		k4[MAX_DP][4];
+double 		m[MAX_DP][4];			// memorizza l'incremento del parametro
 // -----------------------------------------------------------------------------
 // PENDULUM'S MOTION FUNCTIONS
 // -----------------------------------------------------------------------------
@@ -66,12 +66,11 @@ int 	dmiss;
 	h = TSCALE * (float)task_period(i) / 1000.0;
 
 	while (!end) {
+		RK4(i);				// calculates the new value of the pendulum	
+		draw_pend(i);
 
-			RK4(i);				// calculates the new value of the pendulum	
-			draw_pend(i);
-
-			deadline_miss(i);
-			wait_for_period(i);
+		deadline_miss(i);
+		wait_for_period(i);
 	}
 }
 
@@ -86,7 +85,6 @@ int 	a;
 	set_period(a);
 
 	while(!end) {
-
 		draw_dline();
 
 		deadline_miss(a);
@@ -99,19 +97,16 @@ int 	a;
 // -----------------------------------------------------------------------------
 void RK4(int i)
 {
-	// aggiorna i valori di incremento
-	M(i);
+	M(i);		// aggiorna i valori di incremento
 
-	pnd[i].tht1 		+= m[i][0];
-	pnd[i].tht2 		+= m[i][1];
-	pnd[i].tht1_dot 	+= m[i][2];
-	pnd[i].tht2_dot 	+= m[i][3];
-	// printf("theta_dot_1: %1.15f\n", pnd[i].tht1_dot);
-	// printf("theta_dot_2: %1.15f\n", pnd[i].tht2_dot);
+	pnd[i].tht1 	+= m[i][0];
+	pnd[i].tht2 	+= m[i][1];
+	pnd[i].tht1_dot += m[i][2];
+	pnd[i].tht2_dot += m[i][3];
 }
 
 // -----------------------------------------------------------------------------
-// M: it evaluates the increments of the new values of the pendulum
+// M: evaluates the increments of the new values of the pendulum
 // -----------------------------------------------------------------------------
 void M(int i)
 {
@@ -126,102 +121,124 @@ int 	a;
 		m[i][a] = (k1[i][a] + (2 * k2[i][a]) + (2 * k3[i][a]) + k4[i][a])/6;
 }
 
+// -----------------------------------------------------------------------------
+// K1: computes the first step of the Runge-Kutta algorithm
+// -----------------------------------------------------------------------------
 void K1(int i)
 {
-double 	tht1_k;
-double 	tht2_k;
-double 	tht1_dot_k;
-double 	tht2_dot_k;
+double 	tht1_k1;
+double 	tht2_k1;
+double 	tht1_dot_k1;
+double 	tht2_dot_k1;
 
-	tht1_k 		= pnd[i].tht1;
-	tht2_k 		= pnd[i].tht2;
-	tht1_dot_k 	= pnd[i].tht1_dot;
-	tht2_dot_k 	= pnd[i].tht2_dot;
+	tht1_k1 	= pnd[i].tht1;
+	tht2_k1 	= pnd[i].tht2;
+	tht1_dot_k1 = pnd[i].tht1_dot;
+	tht2_dot_k1 = pnd[i].tht2_dot;
 
-	k1[i][0] = h * f1(tht1_dot_k);
-	k1[i][1] = h * f2(tht2_dot_k);
-	k1[i][2] = h * f3(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
-	k1[i][3] = h * f4(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
+	k1[i][0] = h * f1(tht1_dot_k1);
+	k1[i][1] = h * f2(tht2_dot_k1);
+	k1[i][2] = h * f3(tht1_k1, tht2_k1, tht1_dot_k1, tht2_dot_k1, i);
+	k1[i][3] = h * f4(tht1_k1, tht2_k1, tht1_dot_k1, tht2_dot_k1, i);
 }
 
+// -----------------------------------------------------------------------------
+// K2: computes the second step of the Runge-Kutta algorithm
+// -----------------------------------------------------------------------------
 void K2(int i)
 {
-double 	tht1_k;
-double 	tht2_k;
-double 	tht1_dot_k;
-double 	tht2_dot_k;
+double 	tht1_k2;
+double 	tht2_k2;
+double 	tht1_dot_k2;
+double 	tht2_dot_k2;
 
-	tht1_k 		= pnd[i].tht1 		+ (k1[i][0] / 2.0);
-	tht2_k 		= pnd[i].tht2 		+ (k1[i][1] / 2.0);
-	tht1_dot_k 	= pnd[i].tht1_dot 	+ (k1[i][2] / 2.0);
-	tht2_dot_k 	= pnd[i].tht2_dot 	+ (k1[i][3] / 2.0);
+	tht1_k2 	= pnd[i].tht1 		+ (k1[i][0] / 2.0);
+	tht2_k2 	= pnd[i].tht2 		+ (k1[i][1] / 2.0);
+	tht1_dot_k2 = pnd[i].tht1_dot 	+ (k1[i][2] / 2.0);
+	tht2_dot_k2 = pnd[i].tht2_dot 	+ (k1[i][3] / 2.0);
 
-	k2[i][0] = h * f1(tht1_dot_k);
-	k2[i][1] = h * f2(tht2_dot_k);
-	k2[i][2] = h * f3(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
-	k2[i][3] = h * f4(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
+	k2[i][0] = h * f1(tht1_dot_k2);
+	k2[i][1] = h * f2(tht2_dot_k2);
+	k2[i][2] = h * f3(tht1_k2, tht2_k2, tht1_dot_k2, tht2_dot_k2, i);
+	k2[i][3] = h * f4(tht1_k2, tht2_k2, tht1_dot_k2, tht2_dot_k2, i);
 }
 
+// -----------------------------------------------------------------------------
+// K3: computes the third step of the Runge-Kutta algorithm
+// -----------------------------------------------------------------------------
 void K3(int i)
 {
-double 	tht1_k;
-double 	tht2_k;
-double 	tht1_dot_k;
-double 	tht2_dot_k;
+double 	tht1_k3;
+double 	tht2_k3;
+double 	tht1_dot_k3;
+double 	tht2_dot_k3;
 
- 	tht1_k 		= pnd[i].tht1 		+ (k2[i][0] / 2.0);
- 	tht2_k 		= pnd[i].tht2 		+ (k2[i][1] / 2.0);
- 	tht1_dot_k 	= pnd[i].tht1_dot 	+ (k2[i][2] / 2.0);
- 	tht2_dot_k 	= pnd[i].tht2_dot 	+ (k2[i][3] / 2.0);
+ 	tht1_k3 	= pnd[i].tht1 		+ (k2[i][0] / 2.0);
+ 	tht2_k3 	= pnd[i].tht2 		+ (k2[i][1] / 2.0);
+ 	tht1_dot_k3 = pnd[i].tht1_dot 	+ (k2[i][2] / 2.0);
+ 	tht2_dot_k3 = pnd[i].tht2_dot 	+ (k2[i][3] / 2.0);
 
-	k3[i][0] = h * f1(tht1_dot_k);
-	k3[i][1] = h * f2(tht2_dot_k);
-	k3[i][2] = h * f3(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
-	k3[i][3] = h * f4(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
+	k3[i][0] = h * f1(tht1_dot_k3);
+	k3[i][1] = h * f2(tht2_dot_k3);
+	k3[i][2] = h * f3(tht1_k3, tht2_k3, tht1_dot_k3, tht2_dot_k3, i);
+	k3[i][3] = h * f4(tht1_k3, tht2_k3, tht1_dot_k3, tht2_dot_k3, i);
 }
 
+// -----------------------------------------------------------------------------
+// K4: computes the fourth step of the Runge-Kutta algorithm
+// -----------------------------------------------------------------------------
 void K4(int i)
 {
-double 	tht1_k;
-double 	tht2_k;
-double 	tht1_dot_k;
-double 	tht2_dot_k;
+double 	tht1_k4;
+double 	tht2_k4;
+double 	tht1_dot_k4;
+double 	tht2_dot_k4;
 
- 	tht1_k 		= pnd[i].tht1 		+ k3[i][0];
- 	tht2_k 		= pnd[i].tht2 		+ k3[i][1];
- 	tht1_dot_k 	= pnd[i].tht1_dot 	+ k3[i][2];
- 	tht2_dot_k 	= pnd[i].tht2_dot 	+ k3[i][3];
+ 	tht1_k4 	= pnd[i].tht1 		+ k3[i][0];
+ 	tht2_k4 	= pnd[i].tht2 		+ k3[i][1];
+ 	tht1_dot_k4 = pnd[i].tht1_dot 	+ k3[i][2];
+ 	tht2_dot_k4 = pnd[i].tht2_dot 	+ k3[i][3];
 
-	k4[i][0] = h * f1(tht1_dot_k);
-	k4[i][1] = h * f2(tht2_dot_k);
-	k4[i][2] = h * f3(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
-	k4[i][3] = h * f4(tht1_k, tht2_k, tht1_dot_k, tht2_dot_k, i);
+	k4[i][0] = h * f1(tht1_dot_k4);
+	k4[i][1] = h * f2(tht2_dot_k4);
+	k4[i][2] = h * f3(tht1_k4, tht2_k4, tht1_dot_k4, tht2_dot_k4, i);
+	k4[i][3] = h * f4(tht1_k4, tht2_k4, tht1_dot_k4, tht2_dot_k4, i);
 }
 
+// -----------------------------------------------------------------------------
+// F1: first differential equation.
+// -----------------------------------------------------------------------------
 double f1(double tht1_dot)
 {
 	return tht1_dot;
 }
 
+// -----------------------------------------------------------------------------
+// F2: second differential equation.
+// -----------------------------------------------------------------------------
 double f2(double tht2_dot)
 {
 	return tht2_dot;  
 }
 
+// -----------------------------------------------------------------------------
+// F3: third differential equation.
+// It computes the angular acceleration of theta 1, that is the first pendulum
+// -----------------------------------------------------------------------------
 double f3(double tht1, double tht2, double tht1_dot, double tht2_dot, int i)
 {
-double 	num;				// numerator
-double 	den;				// denominator
-double 	m12; 				// (m1 / m2) ratio
-double 	s_tht1;				// sin(tht1)
-double 	s_tht2;				// sin(tht2)
-double 	s_tht12;			// sin(tht1 - tht2)
-double 	c_tht12;			// cos(tht1 - tht2)
-double 	N1;					// first element of the numerator
-double 	N2;					// second 	" " " "
-double 	N3;					// third	" " " "	 
-double 	l1;
-double 	l2;
+double 	num;				// numerator of the output
+double 	den;				// denominator of the output
+double 	m12; 				// ratio between Mass_1 and Mass_2
+double 	s_tht1;				// sine of theta_1
+double 	s_tht2;				// sine of theta_2
+double 	s_tht12;			// sin(thet1 - tht2)
+double 	c_tht12;			// cos(thta_1 - theta_2)
+double 	N1;					// first  element of the numerator
+double 	N2;					// second element of the numerator
+double 	N3;					// third  element of the numerator
+double 	l1;					// length of the 1st pendulum
+double 	l2;					// length of the 2nd pendulum
 
 	l1 = pnd[i].l1;
 	l2 = pnd[i].l2;
@@ -230,13 +247,9 @@ double 	l2;
 
 	s_tht1 = sin(tht1);
 	s_tht2 = sin(tht2);
-		// printf("sin tht1: %1.15lf\n", s_tht1);
-		// printf("sin tht2: %1.15lf\n", s_tht2);
 
 	s_tht12 = sin(tht1 - tht2);
 	c_tht12 = cos(tht1 - tht2);
-		// printf(ssin tht12: %1.15lf\n", s_tht12);
-		// printf(scos tht12:%1.15lf\n", c_tht12);
 
 	N1 = (G / l1) * ((s_tht2 * c_tht12) - (s_tht1 * (m12 + 1)));
 	N2 = pow(tht1_dot, 2) * c_tht12 * s_tht12;
@@ -245,28 +258,24 @@ double 	l2;
 	num = N1 - N2 - N3;
 	den = m12 + 1 - (pow (c_tht12, 2));
 
-		// printf("robo: %1.15lf\n",((s_tht2 * c_tht12) - (s_tht1 * (m12 + 1)) ));
-		// printf("robo: %1.15lf\n",(G / l1));
-		// printf("N1: %1.15lf\n", N1);
-		// printf("N2: %1.15lf\n", N2);
-		// printf("N3: %1.15lf\n", N3);
-		// printf("f3: %1.15lf\n", num/den);
-
 	return (num / den);
 }
 
+// -----------------------------------------------------------------------------
+// F4: fourth differential equation.
+// It computes the angular acceleration of theta 2, that is the second pendulum
+// -----------------------------------------------------------------------------
 double f4(double tht1, double tht2, double tht1_dot, double tht2_dot, int i)
 {
-double 	num;
-double 	tht1_dotdot;
-double 	s_tht2;				// sin(tht2)
-double 	s_tht12;			// sin(tht1 - tht2)
-double 	c_tht12;			// cos(tht1 - tht2)
+double 	tht1_dotdot;		// angular acceleration of theta_1
+double 	s_tht2;				// sine of theta_2
+double 	s_tht12;			// sin(theta_1 - theta_2)
+double 	c_tht12;			// cos(theta_1 - theta_2)
 double 	N1;					// 1st element of the numerator
 double 	N2;					// 2nd element of the numerator
 double 	N3;					// 3rd element of the numerator
-double 	l1;
-double 	l2;
+double 	l1;					// length of the 1st pendulum
+double 	l2;					// length of the 2nd pendulum
 
 	l1 = pnd[i].l1;
 	l2 = pnd[i].l2;
@@ -282,15 +291,13 @@ double 	l2;
 	N2 = (l1 /l2) * tht1_dotdot * c_tht12;
 	N3 = (G / l2) * s_tht2; 
 
-	num = N1 - N2 - N3;
-
-	return num;
+	return N1 - N2 - N3;
 }
 
 // -----------------------------------------------------------------------------
 // THREAD MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
-void task_init(void)
+void task_init()
 {
 int 	i;
 

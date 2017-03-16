@@ -549,12 +549,6 @@ void pend_init()
 int 	i;		// for cycle index
 
 	for (i = 0; i < npend; i++) {
-			// printf("grad1:   %2.15lf\n", pnd[i].tht1);
-			// printf("grad1.1: %2.30lf\n", cos(pnd[i].tht1));
-			// printf("grad1.2: %2.30lf\n", sin(pnd[i].tht1));
-			// printf("grad2:   %2.15lf\n", pnd[i].tht2);
-			// printf("grad2.1: %2.30lf\n", cos(pnd[i].tht1));
-			// printf("grad2.3: %2.30lf\n", sin(pnd[i].tht1));
 		xy_real(i);		
 		xy_graph(i);
 		store_trail(i);
@@ -652,7 +646,7 @@ float 	shd[SH];		// intensity value of the light shade
 
 		for (a = 0; a < SH; a++) {
 			// shade value evaluated as a normalized gaussian function
-			shd[a] = norm_gauss( (0.0005 * (i+1)), (0.05 * a));
+			shd[a] = norm_gauss( VSCALE * (i+1), DIST_G * a);
 			// shade value adapted to the 255 dimension of the  colour table
 			shd[a] *= 255;		
 
@@ -677,7 +671,7 @@ int 	r, g, b;		// red, green, blue component of the colour
 	for (a = 0; a < SH; a++) {
 		// value between [0, 1]
 		shd[a] = pow(1.5, -a);
-		// shade value adapted to the 255 dimension of the colour table
+		// shade value scaled to the 255 dimension of the colour table
 		shd[a] *= 255;
 	}
 
@@ -850,10 +844,8 @@ void xy_real(int i)
 {
 float 	l1;			
 float 	l2;			 
-float 	s_tht1;		 
-float 	c_tht1;		 
-float 	s_tht2;		 
-float 	c_tht2;		 
+float 	s_tht1, c_tht1;		// sine and cosine of theta_1
+float 	s_tht2, c_tht2;		// sine and cosine of theta_2
 
 	l1 		= pnd[i].l1;
 	l2 		= pnd[i].l2;
@@ -889,18 +881,13 @@ void xy_graph(int i)
 // -----------------------------------------------------------------------------
 int real2graph(float value, int i)
 {
-int 	pixel;		// value of the graphic display [pixel]
+int 	pixel;		// value of the graphic display
 float 	l12;		// sum of the length of the two pendulums
 	
 	l12 = pnd[i].l1 + pnd[i].l2;
 	pixel = (int) ((value / l12) * (float)((l / 2) - R));
 	return pixel;
 }
-
-/******************************************************************************
- The next two functions are executed inside a thread 
- and manage the graphical aspect
-*******************************************************************************/
 
 // -----------------------------------------------------------------------------
 // DRAW_PEND: draw the double pendulum on the backround bitmap
@@ -1007,7 +994,7 @@ int 	nn_c_a;
 	for (n = 0; n < SH; n++) {
 		// shade value evaluated as a normalized gaussian function
 		shd[n] = norm_gauss( fabs(1 / ((v) + 1)), (0.06 * n));
-		// shade value adapted to the 255 dimension of the colour table
+		// shade value scaled to the 255 dimension of the colour table
 		shd[n] *= 255;
 	}
 
@@ -1049,7 +1036,7 @@ int 	nn_c_a;
 	// generates the shade vector as an exponential function
 	for (n = 0; n < SH; n++) {
 		shd[n] = pow(1.5, -n);
-		shd[n] *= 255;	// shade value adapted to the 255 dimension of the colour tables
+		shd[n] *= 255;	// shade value scaled to the 255 dimension of the colour tables
 	}
 
 	// draws the lines from the darkest to the lightest
