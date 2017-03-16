@@ -32,12 +32,17 @@
 #define RED 	4		// 2nd mass colour
 #define	GREEN	2		// pendulum colour
 // -----------------------------------------------------------------------------
-// DATA WINDOW CONSTANT
+// STATUS WINDOW CONSTANT
 // -----------------------------------------------------------------------------
-#define LWIN	600		// left		data window coordinate
-#define BWIN	599		// bottom 	data window coordinate
-#define RWIN	799		// right	data window coordinate
-#define UWIN	0		// upper 	data window coordinate
+#define LWIN	600		// left		status window coordinate
+#define BWIN	599		// bottom 	status window coordinate
+#define RWIN	799		// right	status window coordinate
+#define UWIN	0		// upper 	status window coordinate
+#define N_LINE	58		// number of line in the status window
+#define TIT_P	40		// titol position
+#define NUM_P	66		// position of the number of the page
+#define	DIST_L	10		// vertical distance between lines
+#define BEG_L	5		// orizontal position where the line begins	
 // -----------------------------------------------------------------------------
 // PENDULUM CONSTANT
 // -----------------------------------------------------------------------------

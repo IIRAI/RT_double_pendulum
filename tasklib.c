@@ -55,7 +55,6 @@ static int 		time_cmp(struct timespec t1, struct timespec t2);
 // PEND_TASK: thread function of the double pendulum. It evaluates the 
 // coordinate values and draw them on the backgrund bitmap
 // -----------------------------------------------------------------------------
-
 void *pend_task(void *arg)
 {
 int 	i;
@@ -79,7 +78,6 @@ int 	dmiss;
 // -----------------------------------------------------------------------------
 // DLINE_WINTASK: thread function of the deadline status window. 
 // -----------------------------------------------------------------------------
-
 void *dline_wintask(void *arg)
 {
 int 	a;
@@ -99,7 +97,6 @@ int 	a;
 // -----------------------------------------------------------------------------
 // RK4: it evaluates the new values of the pendulum
 // -----------------------------------------------------------------------------
-
 void RK4(int i)
 {
 	// aggiorna i valori di incremento
@@ -116,7 +113,6 @@ void RK4(int i)
 // -----------------------------------------------------------------------------
 // M: it evaluates the increments of the new values of the pendulum
 // -----------------------------------------------------------------------------
-
 void M(int i)
 {
 int 	a;
@@ -288,18 +284,12 @@ double 	l2;
 
 	num = N1 - N2 - N3;
 
-	// printf("N1: %1.15lf\n", N1);
-	// printf("N2: %1.15lf\n", N2);
-	// printf("N3: %1.15lf\n", N3);
-	// printf("f4: %1.15lf\n", num);
-
 	return num;
 }
 
 // -----------------------------------------------------------------------------
 // THREAD MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
-
 void task_init(void)
 {
 int 	i;
@@ -363,7 +353,6 @@ struct 	timespec t;
 // -----------------------------------------------------------------------------
 // WAIT_FOR_PERIOD: It waits for the next period activation
 // -----------------------------------------------------------------------------
-
 void wait_for_period(int i)
 {
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &(tp[i].at), NULL);
@@ -374,7 +363,6 @@ void wait_for_period(int i)
 // -----------------------------------------------------------------------------
 // DEADLINE_MISS: checks for deadline misses
 // -----------------------------------------------------------------------------
-
 int deadline_miss(int i) 
 {
 struct 	timespec now;
@@ -390,7 +378,6 @@ struct 	timespec now;
 // -----------------------------------------------------------------------------
 // FUNCTIONS FOR TIME MANAGEMENT
 // -----------------------------------------------------------------------------
-
 void time_add_ms(struct timespec *t, int ms)
 {
 	t->tv_sec 	+= ms/1000;
