@@ -4,11 +4,11 @@
 // -----------------------------------------------------------------------------
 
 Number of Double Pendulums:
-1
+9
 __________________________
 1st Pendulum:
 Theta_1:
-90
+10
 
 Angular_velocity_1:
 0
@@ -20,7 +20,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-180
+0
 
 Angular_velocity_2:
 0
@@ -34,7 +34,7 @@ __________________________
 
 2nd Pendulum:
 Theta_1:
-90
+20
 
 Angular_velocity_1:
 2
@@ -46,7 +46,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-90
+0
 
 Angular_velocity_2:
 2
@@ -59,10 +59,10 @@ Mass_2:
 __________________________
 3rd Pendulum:
 Theta_1:
-0
+30
 
 Angular_velocity_1:
-4
+0
 
 Length_1:
 2
@@ -74,7 +74,7 @@ Theta_2:
 0
 
 Angular_velocity_2:
-4
+0
 
 Length_2:
 2
@@ -84,7 +84,7 @@ Mass_2:
 __________________________
 4th Pendulum:
 Theta_1:
-66
+40
 
 Angular_velocity_1:
 0
@@ -96,7 +96,7 @@ Mass_1:
 1
 ---------------
 Theta_2:
--66
+0
 
 Angular_velocity_2:
 0

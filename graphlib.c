@@ -25,7 +25,7 @@ int 		change_trail = 0;			// flag to change the trajectory
 // -----------------------------------------------------------------------------
 int 		l;							// length of the BITMAP to display the pendulums
 BITMAP  	*bkg_pend[MAX_DP];			// background of the pendulum
-BITMAP 		*light_tr[MAX_DP];		// contains the Light trail 
+BITMAP 		*light_tr[MAX_DP];			// contains the Light trail 
 BITMAP 		*lagr_tr[MAX_DP];			// contains the Lagrangian trail
 // BITMAP for the status window
 int 		pos[N_LINE];				// vertical position of the lines in the status window
@@ -132,8 +132,12 @@ char 	row[LINE];								// stores the actual row
 	fgets(row, LINE, fd);
 	npend = atoi(row);
 
-	fclose(fd);
+	if (npend > MAX_DP) {
+		printf("Error: too many double pendulum\n");
+		exit(0);
+	}
 
+	fclose(fd);
 }
 
 // -----------------------------------------------------------------------------
@@ -448,7 +452,7 @@ void bkg_length()
 		get_ref_4p();
 	} 	
 
-	if (npend >= 5 && npend <= 9) {
+	if (npend >= 5) {
 		l = L_9P;
 		get_ref_9p();
 	}	
@@ -456,7 +460,9 @@ void bkg_length()
 
 // -----------------------------------------------------------------------------
 // GET_REF_1P; GET_REF_4P; GET_REF_9P: 
-// defines the coordinates of the boxes, based on the number of double pendulums
+// defines the reference coordinates, stored in the ref[] array,  of the Bitmaps,
+// where the pendulums will be displayed.
+// There are three functions, each working for different set of double pendulums:
 // respectively for 1 pendulum, for 4 pendulums at most and 9 pendulums at most. 
 // -----------------------------------------------------------------------------
 void get_ref_1p()
@@ -466,7 +472,7 @@ int 	i; 			// for cycle index
 	ref[0].x = 0;
 	ref[0].y = 0;
 
-	// initialize the other values of the arrays to a default value
+	// initializes the other values of the arrays to a default value
 	for (i = 1; i < MAX_DP; i++) {
 		ref[i].x = 0;
 		ref[i].y = 0;
@@ -475,48 +481,42 @@ int 	i; 			// for cycle index
 
 void get_ref_4p()
 {
-int 	i;			// for cycle index
+int 	def;			// for cycle index, of the default values of the array
+int 	row;			// for cycle index, represents the row number 
+int 	clm;			// for cycle index, representes the column number
+int 	ind = 0;		// index of the box's reference defined
 
-	ref[0].x = 0;
-	ref[0].y = 0;
-	ref[1].x = l;
-	ref[1].y = 0;
-	ref[2].x = 0; 
-	ref[2].y = l;
-	ref[3].x = l;
-	ref[3].y = l;	
+	// creates a checked pattern
+	for (row = 0; row < 2; row ++) {
+		for (clm = 0; clm < 2; clm ++) {
+			ref[ind].x = clm * l;
+			ref[ind].y = row * l;
+			ind ++; 
+		}
+	}
 
-	// initialize the other values of the arrays to a default value
-	for (i = 4; i < MAX_DP; i++) {
-		ref[i].x = 0;
-		ref[i].y = 0;
+	// initializes the other values of the arrays to a default value
+	for (def = 4; def < MAX_DP; def++) {
+		ref[def].x = 0;
+		ref[def].y = 0;
 	}
 }
 
 void get_ref_9p()
 {
-	ref[0].x = 0;
-	ref[0].y = 0;
-	ref[1].x = l;
-	ref[1].y = 0;
-	ref[2].x = 0; 
-	ref[2].y = l;
-	ref[3].x = l;
-	ref[3].y = l;
-	ref[2].x = l * 2;
-	ref[2].y = 0;
-	ref[3].x = 0;
-	ref[3].y = l;
-	ref[4].x = l;
-	ref[4].y = l;
-	ref[5].x = l * 2;
-	ref[5].y = l;
-	ref[6].x = 0;
-	ref[6].y = l * 2;
-	ref[7].x = l;
-	ref[7].y = l * 2;
-	ref[8].x = l * 2;
-	ref[8].y = l * 2;
+int 	def;			// for cycle index, of the default values of the array
+int 	row;			// for cycle index, represents the row number 
+int 	clm;			// for cycle index, representes the column number
+int 	ind = 0;		// index of the box's reference defined
+
+	// creates a checked pattern
+	for (row = 0; row < 3; row++) {
+		for (clm = 0; clm < 3; clm++) {
+			ref[ind].x = clm * l;
+			ref[ind].y = row * l;
+			ind ++; 
+		}
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -596,27 +596,27 @@ void keycmd_page()
 	textout_ex(keycmd, font, "Command Window", TIT_P, pos[0], WH, BKG);
 
 	textout_ex(keycmd, font, "Press ENTER:", BEG_L, pos[2], WH, BKG);
-	textout_ex(keycmd, font, "run the simulation", BEG_L, pos[3], WH, BKG);
+	textout_ex(keycmd, font, "runs the simulation", BEG_L, pos[3], WH, BKG);
 
 	textout_ex(keycmd, font, "Press SPACE:", BEG_L, pos[5], WH, BKG);
-	textout_ex(keycmd, font, "change the trail", BEG_L, pos[6], WH, BKG);
+	textout_ex(keycmd, font, "changes the trail", BEG_L, pos[6], WH, BKG);
 
 	textout_ex(keycmd, font, "Press 1:", BEG_L, pos[8], WH, BKG);
-	textout_ex(keycmd, font, "turn to Command Window", BEG_L, pos[9], WH, BKG);
+	textout_ex(keycmd, font, "turns to Command Window", BEG_L, pos[9], WH, BKG);
 
 	textout_ex(keycmd, font, "Press 2:", BEG_L, pos[11], WH, BKG);
-	textout_ex(keycmd, font, "turn to Initial Data", BEG_L, pos[12], WH, BKG);
+	textout_ex(keycmd, font, "turns to Initial Data", BEG_L, pos[12], WH, BKG);
 	textout_ex(keycmd, font, "Window", BEG_L, pos[13], WH, BKG);
 
 	textout_ex(keycmd, font, "Press 3:", BEG_L, pos[15], WH, BKG);
-	textout_ex(keycmd, font, "turn to Geometrical", BEG_L, pos[16], WH, BKG);
+	textout_ex(keycmd, font, "turns to Geometrical", BEG_L, pos[16], WH, BKG);
 	textout_ex(keycmd, font, "Data Window", BEG_L, pos[17], WH, BKG);
 
 	textout_ex(keycmd, font, "Press 4:", BEG_L, pos[19], WH, BKG);
-	textout_ex(keycmd, font, "turn to Deadline Window", BEG_L, pos[20], WH, BKG);
+	textout_ex(keycmd, font, "turns to Deadline Window", BEG_L, pos[20], WH, BKG);
 
 	textout_ex(keycmd, font, "Press ESC:", BEG_L, pos[22], WH, BKG);
-	textout_ex(keycmd, font, "exit the program", BEG_L, pos[23], WH, BKG);
+	textout_ex(keycmd, font, "exits the program", BEG_L, pos[23], WH, BKG);
 
 	textout_ex(keycmd, font, "Types of trail;", BEG_L, pos[25], WH, BKG);
 	textout_ex(keycmd, font, "left:  proportional", BEG_L, pos[26], WH, BKG);
