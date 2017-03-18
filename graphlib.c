@@ -37,15 +37,15 @@ COLOR_MAP 	table;						// contains the shade values for light effects
 // -----------------------------------------------------------------------------
 // FILE MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
-static void 	get_num_pend();
-static void		get_theta_1();
-static void		get_theta_2();
-static void 	get_theta_dot_1();
-static void 	get_theta_dot_2();
-static void		get_length_1();
-static void		get_length_2();
-static void		get_mass_1();
-static void		get_mass_2();
+static void 	search_num_pend(char *row);
+static void 	search_theta_1(char *row);
+static void 	search_theta_2(char *row);
+static void 	search_theta_1_dot(char *row);
+static void 	search_theta_2_dot(char *row);
+static void 	search_length_1(char *row);
+static void 	search_length_2(char *row);
+static void 	search_mass_1(char *row);
+static void 	search_mass_2(char *row);
 // -----------------------------------------------------------------------------
 // GRAPHIC INITIALIZATION FUNCTIONS
 // -----------------------------------------------------------------------------
@@ -92,41 +92,39 @@ static float 	L(int i);
 // -----------------------------------------------------------------------------
 void read_data()
 {
-	get_num_pend();
-	get_theta_1();
-	get_theta_2();
-	get_theta_dot_1();
-	get_theta_dot_2();
-	get_length_1();
-	get_length_2();
-	get_mass_1();
-	get_mass_2();
+char 	row[LINE];
+	
+	fd = fopen("Data.txt", "r");	
+		if (fd == NULL) {
+			printf ("Error opening the file.\n");
+			exit(1);
+		}
+
+	search_num_pend(row);
+
+	do {
+		fgets(row, LINE, fd);
+		search_theta_1(row);
+		search_theta_2(row);
+		search_theta_1_dot(row);
+		search_theta_2_dot(row);
+		search_length_1(row);
+		search_length_2(row);
+		search_mass_1(row);
+		search_mass_2(row);
+	}	while (!feof(fd));
+
+	fclose(fd);
 }
-// -----------------------------------------------------------------------------
-// GET_NUM_PEND: searches and gets the number of the double pendulums 
-// -----------------------------------------------------------------------------
-void get_num_pend()
+
+void search_num_pend(char *row)
 {
 int 	start = 1;								// flag for the while loop
 char 	*ref = "Number of Double Pendulums";	// line to be search
-char 	row[LINE];								// stores the actual row	
-
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}			
 
 	while (start) {
-
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
 		if (strncmp(row, ref, (int)strlen(ref)) == 0) start = 0;
-
 	}
 	
 	fgets(row, LINE, fd);
@@ -136,277 +134,110 @@ char 	row[LINE];								// stores the actual row
 		printf("Error: too many double pendulum\n");
 		exit(0);
 	}
-
-	fclose(fd);
 }
 
-// -----------------------------------------------------------------------------
-// GET_THETA_1: searches and gets the value of theta 1 for each double pendulum 
-// -----------------------------------------------------------------------------
-void get_theta_1()
+void search_theta_1(char *row)
 {
-int 	start = 0;				// flag for the while loop
-char 	*ref = "Theta_1:";		// line to be search
-char 	row[LINE];				// stores the actual row
+static int 	index = 0;
+char 		*ref = "Theta_1:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}					
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].tht1 = deg2rad(atoi(row));
-			start++;
-		}
+		pnd[index].tht1 = deg2rad(atoi(row));
+		index++;
 	}
-
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_THETA_2: searches and gets the value of theta 2 for each double pendulum 
-// -----------------------------------------------------------------------------
-void get_theta_2()
+void search_theta_2(char *row)
 {
-int 	start = 0;				// flag for the while loop
-char 	*ref = "Theta_2:";		// line to be search
-char 	row[LINE];				// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Theta_2:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].tht2 = deg2rad(atoi(row));
-			start++;
-		}
+		pnd[index].tht2 = deg2rad(atoi(row));
+		index++;
 	}
-	
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_THETA_DOT_1: searches and gets the value of the initial angular velocity
-// of the first pendulum for each double pendulum 
-// -----------------------------------------------------------------------------
-void get_theta_dot_1()
+void search_theta_1_dot(char *row)
 {
-int 	start = 0;							// flag for the while loop
-char 	*ref = "Angular_velocity_1:";		// line to be search
-char 	row[LINE];							// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Angular_velocity_1:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].tht1_dot = (atoi(row));
-			start++;
-		}
+		pnd[index].tht1_dot = atoi(row);
+		index++;
 	}
-	
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_THETA_DOT_2: searches and gets the value of the initial angular velocity
-// of the second pendulum for each double pendulum 
-// -----------------------------------------------------------------------------
-void get_theta_dot_2()
+void search_theta_2_dot(char *row)
 {
-int 	start = 0;							// flag for the while loop
-char 	*ref = "Angular_velocity_2:";		// line to be search
-char 	row[LINE];							// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Angular_velocity_1:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].tht2_dot = (atoi(row));
-			start++;
-		}
+		pnd[index].tht2_dot = atoi(row);
+		index++;
 	}
-	
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_LENGTH_1: searches and gets the length of the first pendulum for each
-// double pendulum
-// -----------------------------------------------------------------------------
-void get_length_1()
+void search_length_1(char *row)
 {
-int 	start = 0;				// flag for the while loop
-char 	*ref = "Length_1:";		// line to be search
-char 	row[LINE];				// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Length_1:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].l1 = atoi(row);
-			start++;
-		}
+		pnd[index].l1  = atoi(row);
+		index++;
 	}
-	
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_LENGTH_2: searches and gets the length of the second pendulum for each
-// double pendulum
-// -----------------------------------------------------------------------------
-void get_length_2()
+void search_length_2(char *row)
 {
-int 	start = 0;				// flag for the while loop
-char 	*ref = "Length_2:";		// line to be search
-char 	row[LINE];				// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Length_2:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].l2 = atoi(row);
-			start++;
-		}
+		pnd[index].l2  = atoi(row);
+		index++;
 	}
-
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_MASS_1: searches and gets the mass of the first pendulum for each
-// double pendulum
-// -----------------------------------------------------------------------------
-void get_mass_1()
+void search_mass_1(char *row)
 {
-int 	start = 0;				// flag for the while loop
-char 	*ref = "Mass_1:";		// line to be search
-char 	row[LINE];				// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Mass_1:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].m1 = atoi(row);
-			start++;
-		}
+		pnd[index].m1  = atoi(row);
+		index++;
 	}
-
-	fclose(fd);
+	else return;
 }
 
-// -----------------------------------------------------------------------------
-// GET_MASS_2: searches and gets the mass of the second pendulum for each
-// double pendulum
-// -----------------------------------------------------------------------------
-void get_mass_2()
+void search_mass_2(char *row)
 {
-int 	start = 0;								// flag for the while loop
-char 	*ref = "Mass_2:";						// line to be search
-char 	row[LINE];								// stores the actual row				
+static int 	index = 0;
+char 		*ref = "Mass_2:";		// line to be searched
 
-	fd = fopen("Data.txt", "r");	
-	if (fd == NULL) {
-		printf ("Error opening the file.\n");
-		exit(1);
-	}	
-
-	while (start < npend) {
-
+	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-
-		if (row == NULL) {
-			printf("Error reading the file.\n");
-		}
-
-		if (strncmp(row, ref, (int)strlen(ref)) == 0) {
-			fgets(row, LINE, fd);
-			pnd[start].m2 = atoi(row);
-			start++;
-		}
+		pnd[index].m2  = atoi(row);
+		index++;
 	}
-		fclose(fd);
+	else return;
 }
 
 // -----------------------------------------------------------------------------

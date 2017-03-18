@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 // COMMENT HERE!!!
 // The length of a line in this text cannot excede 80 character
+il numero di pendoli deve essere prumo
 // -----------------------------------------------------------------------------
 
 Number of Double Pendulums:
@@ -11,7 +12,7 @@ Theta_1:
 10
 
 Angular_velocity_1:
-0
+4
 
 Length_1:
 2
@@ -20,10 +21,10 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-0
+10
 
 Angular_velocity_2:
-0
+4
 
 Length_2:
 2
@@ -37,7 +38,7 @@ Theta_1:
 20
 
 Angular_velocity_1:
-2
+0
 
 Length_1:
 2
@@ -46,7 +47,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-0
+20
 
 Angular_velocity_2:
 2
@@ -71,7 +72,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-0
+30
 
 Angular_velocity_2:
 0
@@ -96,7 +97,7 @@ Mass_1:
 1
 ---------------
 Theta_2:
-0
+40
 
 Angular_velocity_2:
 0
@@ -109,7 +110,7 @@ Mass_2:
 __________________________
 5th Pendulum:
 Theta_1:
-90
+50
 
 Angular_velocity_1:
 0
@@ -121,7 +122,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-90
+50
 
 Angular_velocity_2:
 0
@@ -134,7 +135,7 @@ Mass_2:
 __________________________
 6th Pendulum:
 Theta_1:
-90
+60
 
 Angular_velocity_1:
 0
@@ -146,7 +147,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-90
+60
 
 Angular_velocity_2:
 0
@@ -159,7 +160,7 @@ Mass_2:
 __________________________
 7th Pendulum:
 Theta_1:
-90
+70
 
 Angular_velocity_1:
 0
@@ -171,7 +172,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-90
+70
 
 Angular_velocity_2:
 0
@@ -184,7 +185,7 @@ Mass_2:
 __________________________
 8th Pendulum:
 Theta_1:
-90
+80
 
 Angular_velocity_1:
 0
@@ -196,7 +197,7 @@ Mass_1:
 1
 ---------------	
 Theta_2:
-90
+80
 
 Angular_velocity_2:
 0
