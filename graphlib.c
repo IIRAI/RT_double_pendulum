@@ -18,6 +18,7 @@ struct 		point 		ref[MAX_DP];
 struct 		point_real 	pr[MAX_DP];			
 struct 		point_pixel pp[MAX_DP];			
 struct 		cbuf 		trail[MAX_DP];	
+int 		pend_flag = 0;				// flag to activate the pendulum's thread once
 int 		dline_flag = 0;				// flag to draw the deadline window
 int 		change_trail = 0;			// flag to change the trajectory
 // -----------------------------------------------------------------------------
@@ -63,7 +64,7 @@ static void 	keycmd_page();
 static void 	light_column();
 static void 	lagr_column();
 static void 	initdata_page();
-static void 	geomdata_page();
+static void 	physdata_page();
 static void 	deadline_page();
 // -----------------------------------------------------------------------------
 // GRAPHIC MANAGEMENT FUNCTIONS
@@ -92,7 +93,7 @@ static float 	L(int i);
 // -----------------------------------------------------------------------------
 void read_data()
 {
-char 	row[LINE];
+char 	row[LINE];		// stores the current line read of the .txt file
 	
 	fd = fopen("Data.txt", "r");	
 		if (fd == NULL) {
@@ -117,11 +118,15 @@ char 	row[LINE];
 	fclose(fd);
 }
 
+// -----------------------------------------------------------------------------
+// SEARCH_NUM_PEND: searches in the .txt file the number of double pendulums
+// -----------------------------------------------------------------------------
 void search_num_pend(char *row)
 {
 int 	start = 1;								// flag for the while loop
 char 	*ref = "Number of Double Pendulums";	// line to be search
 
+	// searches the .txt file until the "ref" string is found
 	while (start) {
 		fgets(row, LINE, fd);
 		if (strncmp(row, ref, (int)strlen(ref)) == 0) start = 0;
@@ -136,6 +141,12 @@ char 	*ref = "Number of Double Pendulums";	// line to be search
 	}
 }
 
+// -----------------------------------------------------------------------------
+// SEARCHING DATA FUNCTIONS: 
+// the next functions compare the input string "row" to a 
+// key string that identifies the data to be searched, if the data is found
+// it is stored in the parameter structure of the double pendulum
+// -----------------------------------------------------------------------------
 void search_theta_1(char *row)
 {
 static int 	index = 0;
@@ -195,7 +206,7 @@ char 		*ref = "Length_1:";		// line to be searched
 
 	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-		pnd[index].l1  = atoi(row);
+		pnd[index].l1 = atoi(row);
 		index++;
 	}
 	else return;
@@ -208,7 +219,7 @@ char 		*ref = "Length_2:";		// line to be searched
 
 	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-		pnd[index].l2  = atoi(row);
+		pnd[index].l2 = atoi(row);
 		index++;
 	}
 	else return;
@@ -221,7 +232,7 @@ char 		*ref = "Mass_1:";		// line to be searched
 
 	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-		pnd[index].m1  = atoi(row);
+		pnd[index].m1 = atoi(row);
 		index++;
 	}
 	else return;
@@ -234,7 +245,7 @@ char 		*ref = "Mass_2:";		// line to be searched
 
 	if (strncmp(row, ref, (int)strlen(ref)) == 0) {
 		fgets(row, LINE, fd);
-		pnd[index].m2  = atoi(row);
+		pnd[index].m2 = atoi(row);
 		index++;
 	}
 	else return;
@@ -276,17 +287,15 @@ void bkg_length()
 	if (npend == 1) {
 		l = L_1P;
 		get_ref_1p();
-	}		
-
+	}
 	if (npend >= 2 && npend <= 4) {
 		l = L_4P;
 		get_ref_4p();
-	} 	
-
+	}
 	if (npend >= 5) {
 		l = L_9P;
 		get_ref_9p();
-	}	
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -403,7 +412,7 @@ int 	i;		// for cycle index
 	create_window_bitmap();
 	keycmd_page();
 	initdata_page();
-	geomdata_page();
+	physdata_page();
 	deadline_page();
 }
 
@@ -553,12 +562,12 @@ char 	d[30];		// stores the line to be printed on the page
 // GEOMDATA_PAGE: writes the geometrical data of each double pendulum 
 // as length and mass
 // -----------------------------------------------------------------------------
-void geomdata_page()
+void physdata_page()
 {
 int 	i;			// for cycle index
 char 	d[30];		// stores the line to be printed on the page
 
-	textout_ex(geom_data, font, "Geometrical Data", TIT_P, pos[0], WH, BKG);
+	textout_ex(geom_data, font, "Physical Data", TIT_P, pos[0], WH, BKG);
 
 	for (i = 0; i < npend; i++) {
 
@@ -592,9 +601,17 @@ void deadline_page()
 	textout_ex(dline, font, "Deadline Window", TIT_P, pos[0], WH, BKG);
 
 	// the lines that write the missed deadline must be updated by a thread
-	task_create(npend, dline_wintask, WPER, WDL, WPRI);
+	task_create(NUM_W, dline_wintask, WPER, WDL, WPRI);
 
 	textout_ex(dline, font, "page 4/4", NUM_P, pos[N_LINE - 1], WH, BKG);
+}
+
+// -----------------------------------------------------------------------------
+// LISTEN_KEYBOARD: creates the command task to manage the imput command
+// -----------------------------------------------------------------------------
+void listen_keyboard()
+{
+	task_create(NUM_C, command_task, WPER, WDL, WPRI);
 }
 
 // -----------------------------------------------------------------------------
@@ -616,8 +633,11 @@ int 	n;			// for cycle index
 
 	switch(scan) {
 		case KEY_ENTER:
-			for (n = 0; n < npend; n++) {
-				task_create(n, pend_task, PER, DL, PPRI);
+			if (pend_flag == 0) {
+				for (n = 0; n < npend; n++) {
+					task_create(n, pend_task, PER, DL, PPRI);
+				}
+				pend_flag = 1;
 			}
 			break;
 		case KEY_SPACE:
@@ -640,6 +660,8 @@ int 	n;			// for cycle index
 			dline_flag = 1;
 			blit(dline, screen, 0, 0, LWIN, UWIN, dline->w, dline->h);
 			break;
+		case KEY_ESC:
+			end = 1;
 		default: 
 			break;
 	}
@@ -748,18 +770,19 @@ void draw_dline()
 int 	i;				// for cycle index
 char 	d[30];			// stores the line to be printed on the page
 
-	sprintf(d, "Window task: %d", tp[npend].dmiss);
+	sprintf(d, "Window task: %d", tp[NUM_W].dmiss);
 	textout_ex(dline, font, d, BEG_L, pos[2], WH, BKG);
+	sprintf(d, "Command task: %d", tp[NUM_C].dmiss);
+	textout_ex(dline, font, d, BEG_L, pos[4], WH, BKG);
 
 	for(i = 0; i < npend; i++) {
 			sprintf(d, "Pendulum %d: %d", i + 1, tp[i].dmiss);
-			textout_ex(dline, font, d, BEG_L, pos[4 + (2 * i)], WH, BKG);
+			textout_ex(dline, font, d, BEG_L, pos[6 + (2 * i)], WH, BKG);
 	}
 
 	if (dline_flag) {
 		blit(dline, screen, 0, 0, LWIN, UWIN, dline->w, dline->h);
 	}
-
 }
 
 // -----------------------------------------------------------------------------

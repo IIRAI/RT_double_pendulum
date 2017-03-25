@@ -11,9 +11,14 @@
 #define PER		15		// pendulum task period
 #define DL		15		// pendulum task deadline
 #define PPRI	80		// pendulum task priority
-#define WPER	30		// deadline window period
-#define WDL		30		// deadline window deadline
+#define WPER	50		// deadline window period
+#define WDL		50		// deadline window deadline
 #define WPRI	50		// deadline window priority
+#define CPER	50		// command task period
+#define CDL		50		// command task deadline
+#define CPRI	60		// command task priority
+#define NUM_W	9		// number id of the window task 
+#define NUM_C	10		// number id of the command task
 // -----------------------------------------------------------------------------
 // GRAPHICS CONSTANT
 // -----------------------------------------------------------------------------
@@ -122,6 +127,7 @@ void 	display_init();
 // -----------------------------------------------------------------------------
 // GRAPHIC MANAGEMENT FUNCTIONS
 // -----------------------------------------------------------------------------
+void 	listen_keyboard();
 char 	get_scancode();
 void 	execute_scan(char scan);
 void 	draw_pend(int i);

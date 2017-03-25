@@ -13,7 +13,7 @@ COMMENT HERE
 struct 			sched_param *mypar;
 struct 			task_par 	tp[N_TASK];
 pthread_attr_t 	myatt[N_TASK];
-pthread_t 		pend[N_TASK];
+pthread_t 		task[N_TASK];
 int 			end = 0;						// flag to terminate the task
 float 			h;								// increment interval
 
@@ -50,6 +50,26 @@ static int 		deadline_miss(int i);
 static void 	time_add_ms(struct timespec *t, int ms);
 static void 	time_copy(struct timespec *td, struct timespec ts);
 static int 		time_cmp(struct timespec t1, struct timespec t2);
+
+// -----------------------------------------------------------------------------
+// COMMAND_TASK: manages the input command from keyboard
+// -----------------------------------------------------------------------------
+void *command_task(void *arg)
+{
+int 	a;
+char 	scan = 0;
+	
+	a = task_argument(arg);
+	set_period(a);
+
+	while(!end) {
+		scan = get_scancode();
+		execute_scan(scan);
+
+		deadline_miss(a);
+		wait_for_period(a);
+	}
+}
 
 // -----------------------------------------------------------------------------
 // PEND_TASK: thread function of the double pendulum. It evaluates the 
@@ -118,7 +138,7 @@ int 	a;
 	K4(i);
 
 	for (a = 0; a < 4; a++)
-		m[i][a] = (k1[i][a] + (2 * k2[i][a]) + (2 * k3[i][a]) + k4[i][a])/6;
+		m[i][a] = (k1[i][a] + (2 * k2[i][a]) + (2 * k3[i][a]) + k4[i][a]) / 6;
 }
 
 // -----------------------------------------------------------------------------
@@ -317,10 +337,10 @@ struct 	sched_param mypar;
 	tp[i].deadline = dline;
 	tp[i].priority = pri;
 
-	pend[i] = (pthread_t) i;
+	task[i] = (pthread_t) i;
 
 	set_priority(i, &mypar);
-	pthread_create(&pend[i], &myatt[i], task_fun, &tp[i]);
+	pthread_create(&task[i], &myatt[i], task_fun, &tp[i]);
 }
 
 void set_priority(int i, struct sched_param *mypar)
@@ -343,7 +363,7 @@ int task_period(int i)
 
 void wait_for_task_end(int i)
 {
-	pthread_join(pend[i], NULL);
+pthread_join(task[i], NULL);
 }
 
 void set_period(int i) 

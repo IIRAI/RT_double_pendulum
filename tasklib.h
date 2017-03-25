@@ -5,11 +5,11 @@
 // PHISICAL CONSTANT
 // -----------------------------------------------------------------------------
 #define G			9.81		// gravity
-#define TSCALE		1			// time scale factor
+#define TSCALE		1.5			// time scale factor
 // -----------------------------------------------------------------------------
 // TASK CONSTANT
 // -----------------------------------------------------------------------------
-#define N_TASK		10			// maximum number of task
+#define N_TASK		11			// maximum number of task
 // -----------------------------------------------------------------------------
 // STRUCTURE
 // -----------------------------------------------------------------------------
@@ -28,11 +28,12 @@ struct task_par {
 // -----------------------------------------------------------------------------
 extern int 		npend;
 extern struct 	sched_param *mypar;
-extern struct 	task_par 	tp[MAX_DP + 1];
+extern struct 	task_par 	tp[N_TASK];
 extern int 		end;
 // -----------------------------------------------------------------------------
 // TASK FUNCTIONS
 // -----------------------------------------------------------------------------
+void 	*command_task(void *arg);
 void 	*pend_task(void *arg);
 void	*dline_wintask(void *arg);
 // -----------------------------------------------------------------------------

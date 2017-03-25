@@ -6,9 +6,6 @@
 
 - creare modo per ridurre la complessità computazionale RK2/RK1 per rimanere all'interno delle specifiche di time constrain.
 
-- cerca d unificare le funzioni di lettura con una sola funzione con diversi input: frase da cercare e vetore dove salvare 
-
-- crea funzione per errore in lettura del file .txt
 ---------------------------------------------------------------------------------
 
 --- GIUSTIFICAZIONE PER THREAD DEDICATI.   

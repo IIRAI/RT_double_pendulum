@@ -1,8 +1,19 @@
-// -----------------------------------------------------------------------------
-// COMMENT HERE!!!
-// The length of a line in this text cannot excede 80 character
-il numero di pendoli deve essere prumo
-// -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+DESCRIPTION:
+This file contains the data input of the "double_pendulum" program.
+You can choose:
+	-> the number of double pendulums to display
+	-> the initial conditions as position and angular velocity 
+	-> the physical parameters as the length and the mass of both pendulums. 
+
+READ ME:
+-This file must be in the same directory of the "double_pendulum" program.
+-The value of the data must be written in a new line in respect to the data name. 
+-The number of double pendulums must be in a value between 1 and 9, this must be 
+the first to be read. Following are reported the additional data, these coulb be 
+in different order, however the program stores the value from the 1st pendulum 
+to the last one.
+--------------------------------------------------------------------------------
 
 Number of Double Pendulums:
 9
@@ -12,7 +23,7 @@ Theta_1:
 10
 
 Angular_velocity_1:
-4
+0
 
 Length_1:
 2
@@ -24,7 +35,7 @@ Theta_2:
 10
 
 Angular_velocity_2:
-4
+0
 
 Length_2:
 2
@@ -50,7 +61,7 @@ Theta_2:
 20
 
 Angular_velocity_2:
-2
+0
 
 Length_2:
 2
