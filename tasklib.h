@@ -33,8 +33,8 @@ extern int 		end;
 // -----------------------------------------------------------------------------
 // TASK FUNCTIONS
 // -----------------------------------------------------------------------------
-void 	*command_task(void *arg);
-void 	*pend_task(void *arg);
+void	*command_task(void *arg);
+void	*pend_task(void *arg);
 void	*dline_wintask(void *arg);
 // -----------------------------------------------------------------------------
 // THREAD MANAGEMENT FUNCIONS

@@ -22,37 +22,39 @@
 // -----------------------------------------------------------------------------
 // GRAPHICS CONSTANT
 // -----------------------------------------------------------------------------
-#define XWIN	800		// window x resolution
-#define	YWIN	600		// window y resolution
-#define	L_1P	600		// length of the image for max 1 pendulum 
-#define	L_4P	300		// length of the image for max 4 pendulum
-#define	L_9P	200		// length of the image for max 9 pendulum
+// PENDULUM WINDOW CONSTANT
 // -----------------------------------------------------------------------------
-// COLOUR
-// -----------------------------------------------------------------------------
-#define BKG		0		// background colour
-#define WH 		15		// white colour
-#define GREY 	8		// central pivot colour
-#define BLUE 	1		// 1st mass colour
-#define RED 	4		// 2nd mass colour
-#define	GREEN	2		// pendulum colour
+#define    XWIN   800    // window x resolution
+#define    YWIN   600    // window y resolution
+#define    L_1P   600    // length of the image for max 1 pendulum 
+#define    L_4P   300    // length of the image for max 4 pendulum
+#define    L_9P   200    // length of the image for max 9 pendulum
 // -----------------------------------------------------------------------------
 // STATUS WINDOW CONSTANT
 // -----------------------------------------------------------------------------
-#define LWIN	600		// left		status window coordinate
-#define BWIN	599		// bottom 	status window coordinate
-#define RWIN	799		// right	status window coordinate
-#define UWIN	0		// upper 	status window coordinate
-#define N_LINE	58		// number of line in the status window
-#define TIT_P	40		// titol position
-#define NUM_P	66		// position of the number of the page
-#define	DIST_L	10		// vertical distance between lines
-#define BEG_L	5		// orizontal position where the line begins	
+#define LWIN    600     // left     status window coordinate
+#define BWIN    599     // bottom   status window coordinate
+#define RWIN    799     // right    status window coordinate
+#define UWIN    0       // upper    status window coordinate
+#define N_LINE  58      // number of line in the status window
+#define TIT_P   40      // title position
+#define NUM_P   66      // position of the number of the page
+#define DIST_L  10      // vertical distance between lines
+#define BEG_L   5       // orizontal position where the line begins	
+// -----------------------------------------------------------------------------
+// COLOUR
+// -----------------------------------------------------------------------------
+#define BKG     0       // background colour
+#define WH      15      // white colour
+#define GREY    8       // central pivot colour
+#define BLUE    1       // 1st mass colour
+#define RED     4       // 2nd mass colour
+#define	GREEN   2       // pendulum colour
 // -----------------------------------------------------------------------------
 // PENDULUM CONSTANT
 // -----------------------------------------------------------------------------
 #define MAX_DP	9					// max number of pendulums
-#define	PI 		3.141592653589793	// questo è necesario per avere una giusta approssimazione
+#define	PI 		3.141592653589793	// longer and cooler
 #define TLEN	2					// trail point stored 
 // -----------------------------------------------------------------------------
 // PENDULUM GRAPHIC
@@ -60,10 +62,10 @@
 #define R 		5					// radius of the mass dot
 #define SH		5					// pixel radius of the trajectory shade
 #define VSCALE	0.0005				// variance scale factor for light shade
-#define DIST_G	0.05				// distaance between points at which the gaussian is evaluated
+#define DIST_G	0.05				// distance between points at which the gaussian is evaluated
 
 // -----------------------------------------------------------------------------
-// STRUCTURE
+// STRUCTURES
 // -----------------------------------------------------------------------------
 
 // circular buffer to store the points of the trail

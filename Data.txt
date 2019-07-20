@@ -6,11 +6,11 @@ You can choose:
 	-> the initial conditions as position and angular velocity 
 	-> the physical parameters as the length and the mass of both pendulums. 
 
-READ ME:
+GUIDE:
 -This file must be in the same directory of the "double_pendulum" program.
--The value of the data must be written in a new line in respect to the data name. 
+-The value of the data must be written in a new line with respect to the data name. 
 -The number of double pendulums must be in a value between 1 and 9, this must be 
-the first to be read. Following are reported the additional data, these coulb be 
+the first to be read. Following are reported the additional data, these could be 
 in different order, however the program stores the value from the 1st pendulum 
 to the last one.
 --------------------------------------------------------------------------------

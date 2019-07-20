@@ -13,7 +13,6 @@ CFLAGS = -Wall -lpthread -lrt -lm
 #------------------------------------------------------------
 # OBJS are the object files to be linked
 #------------------------------------------------------------
-# OBJ1 = readlib
 OBJ1 = graphlib
 OBJ2 = tasklib
 OBJS = $(MAIN).o $(OBJ1).o $(OBJ2).o

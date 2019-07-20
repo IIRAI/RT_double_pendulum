@@ -533,7 +533,7 @@ int 	r, g, b;		// red, green, blue component of the colour
 void initdata_page()
 {	
 int 	i;			// for cycle index
-char 	d[30];		// stores the line to be printed on the page
+char 	d[45];		// stores the line to be printed on the page
 
 	textout_ex(init_data, font, "Initial Data", TIT_P, pos[0], WH, BKG);
 
@@ -671,7 +671,7 @@ int 	n;			// for cycle index
 // DEG2RAD: converts values from degree  to radiant
 // -----------------------------------------------------------------------------
 double deg2rad(double deg)
-{			
+{
 double 	rad;
 
 	rad = (deg / 180.0) * PI;
